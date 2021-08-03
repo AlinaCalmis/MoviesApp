@@ -16,7 +16,7 @@ void main() {
   final Client client = Client();
   final MovieApp api = MovieApp(client: client);
   final AppEpics epics = AppEpics(api: api);
-  final Store<AppState> store = Store(reducer, initialState: AppState.initialState(), middleware: [
+  final Store<AppState> store = Store<AppState>(reducer, initialState: AppState.initialState(), middleware: <Middleware<AppState>>[
     EpicMiddleware<AppState>(epics.epics),
   ]);
 

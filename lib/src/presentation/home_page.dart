@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   void _scrollListener() {
     if (_controller.offset >= _controller.position.maxScrollExtent && !_controller.position.outOfRange) {
       final Store<AppState> store = StoreProvider.of<AppState>(context);
-      store.dispatch(GetMovies());
+      store.dispatch(const GetMovies());
     }
   }
 
@@ -46,12 +46,12 @@ class _HomePageState extends State<HomePage> {
         title: Text('YTS Movies',style: GoogleFonts.montserrat(),),
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           IsLoadingContainer(builder: (BuildContext context, bool isLoading) {
             return MovieContainer(builder: (BuildContext context, BuiltList<Movie> movies) {
               if (movies.isEmpty && isLoading) {
                 return const Center(
-                  child: const CircularProgressIndicator(),
+                  child: CircularProgressIndicator(),
                 );
               }
               return Expanded(
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                             height: 60,
                             child: GridTileBar(
                               backgroundColor: Colors.black45,
-                              leading: Icon(
+                              leading: const Icon(
                                 Icons.star_border_purple500_outlined,
                                 color: Colors.amber,
                               ),
