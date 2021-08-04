@@ -12,6 +12,7 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
   factory Movie.fromJson(dynamic json) => serializers.deserializeWith(serializer, json)!;
 
   Movie._();
+  int get id;
 
   String get title;
 
@@ -19,10 +20,15 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
 
   double get rating;
 
+  String get summary;
+
   BuiltList<String> get genres;
 
   @BuiltValueField(wireName: 'medium_cover_image')
   String get mediumImage;
+
+  @BuiltValueField(wireName: 'background_image')
+  String get background;
 
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this)! as Map<String, dynamic>;
 

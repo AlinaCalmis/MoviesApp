@@ -8,6 +8,7 @@ part of index;
 
 Serializer<AppState> _$appStateSerializer = new _$AppStateSerializer();
 Serializer<Movie> _$movieSerializer = new _$MovieSerializer();
+Serializer<AppUser> _$appUserSerializer = new _$AppUserSerializer();
 
 class _$AppStateSerializer implements StructuredSerializer<AppState> {
   @override
@@ -38,6 +39,13 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
       result
         ..add('selectedMovie')
         ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
+    value = object.user;
+    if (value != null) {
+      result
+        ..add('user')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(AppUser)));
     }
     return result;
   }
@@ -75,6 +83,10 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
           result.selectedMovie = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
           break;
+        case 'user':
+          result.user.replace(serializers.deserialize(value,
+              specifiedType: const FullType(AppUser))! as AppUser);
+          break;
       }
     }
 
@@ -92,6 +104,8 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
   Iterable<Object?> serialize(Serializers serializers, Movie object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
       'title',
       serializers.serialize(object.title,
           specifiedType: const FullType(String)),
@@ -100,12 +114,18 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       'rating',
       serializers.serialize(object.rating,
           specifiedType: const FullType(double)),
+      'summary',
+      serializers.serialize(object.summary,
+          specifiedType: const FullType(String)),
       'genres',
       serializers.serialize(object.genres,
           specifiedType:
               const FullType(BuiltList, const [const FullType(String)])),
       'medium_cover_image',
       serializers.serialize(object.mediumImage,
+          specifiedType: const FullType(String)),
+      'background_image',
+      serializers.serialize(object.background,
           specifiedType: const FullType(String)),
     ];
 
@@ -123,6 +143,10 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'title':
           result.title = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -135,6 +159,10 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
           result.rating = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
           break;
+        case 'summary':
+          result.summary = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'genres':
           result.genres.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -144,6 +172,74 @@ class _$MovieSerializer implements StructuredSerializer<Movie> {
         case 'medium_cover_image':
           result.mediumImage = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'background_image':
+          result.background = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$AppUserSerializer implements StructuredSerializer<AppUser> {
+  @override
+  final Iterable<Type> types = const [AppUser, _$AppUser];
+  @override
+  final String wireName = 'AppUser';
+
+  @override
+  Iterable<Object?> serialize(Serializers serializers, AppUser object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object?>[
+      'uid',
+      serializers.serialize(object.uid, specifiedType: const FullType(String)),
+      'username',
+      serializers.serialize(object.username,
+          specifiedType: const FullType(String)),
+      'email',
+      serializers.serialize(object.email,
+          specifiedType: const FullType(String)),
+    ];
+    Object? value;
+    value = object.photoUrl;
+    if (value != null) {
+      result
+        ..add('photoUrl')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    return result;
+  }
+
+  @override
+  AppUser deserialize(Serializers serializers, Iterable<Object?> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new AppUserBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final Object? value = iterator.current;
+      switch (key) {
+        case 'uid':
+          result.uid = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'username':
+          result.username = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'email':
+          result.email = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'photoUrl':
+          result.photoUrl = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
           break;
       }
     }
@@ -163,6 +259,8 @@ class _$AppState extends AppState {
   final int page;
   @override
   final int? selectedMovie;
+  @override
+  final AppUser? user;
 
   factory _$AppState([void Function(AppStateBuilder)? updates]) =>
       (new AppStateBuilder()..update(updates)).build();
@@ -172,7 +270,8 @@ class _$AppState extends AppState {
       required this.getNextPage,
       required this.movies,
       required this.page,
-      this.selectedMovie})
+      this.selectedMovie,
+      this.user})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(isLoading, 'AppState', 'isLoading');
     BuiltValueNullFieldError.checkNotNull(
@@ -196,17 +295,20 @@ class _$AppState extends AppState {
         getNextPage == other.getNextPage &&
         movies == other.movies &&
         page == other.page &&
-        selectedMovie == other.selectedMovie;
+        selectedMovie == other.selectedMovie &&
+        user == other.user;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, isLoading.hashCode), getNextPage.hashCode),
-                movies.hashCode),
-            page.hashCode),
-        selectedMovie.hashCode));
+            $jc(
+                $jc($jc($jc(0, isLoading.hashCode), getNextPage.hashCode),
+                    movies.hashCode),
+                page.hashCode),
+            selectedMovie.hashCode),
+        user.hashCode));
   }
 
   @override
@@ -216,7 +318,8 @@ class _$AppState extends AppState {
           ..add('getNextPage', getNextPage)
           ..add('movies', movies)
           ..add('page', page)
-          ..add('selectedMovie', selectedMovie))
+          ..add('selectedMovie', selectedMovie)
+          ..add('user', user))
         .toString();
   }
 }
@@ -245,6 +348,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set selectedMovie(int? selectedMovie) =>
       _$this._selectedMovie = selectedMovie;
 
+  AppUserBuilder? _user;
+  AppUserBuilder get user => _$this._user ??= new AppUserBuilder();
+  set user(AppUserBuilder? user) => _$this._user = user;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -255,6 +362,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _movies = $v.movies.toBuilder();
       _page = $v.page;
       _selectedMovie = $v.selectedMovie;
+      _user = $v.user?.toBuilder();
       _$v = null;
     }
     return this;
@@ -284,12 +392,16 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               movies: movies.build(),
               page: BuiltValueNullFieldError.checkNotNull(
                   page, 'AppState', 'page'),
-              selectedMovie: selectedMovie);
+              selectedMovie: selectedMovie,
+              user: _user?.build());
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'movies';
         movies.build();
+
+        _$failedField = 'user';
+        _user?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());
@@ -303,31 +415,43 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
 
 class _$Movie extends Movie {
   @override
+  final int id;
+  @override
   final String title;
   @override
   final int year;
   @override
   final double rating;
   @override
+  final String summary;
+  @override
   final BuiltList<String> genres;
   @override
   final String mediumImage;
+  @override
+  final String background;
 
   factory _$Movie([void Function(MovieBuilder)? updates]) =>
       (new MovieBuilder()..update(updates)).build();
 
   _$Movie._(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.year,
       required this.rating,
+      required this.summary,
       required this.genres,
-      required this.mediumImage})
+      required this.mediumImage,
+      required this.background})
       : super._() {
+    BuiltValueNullFieldError.checkNotNull(id, 'Movie', 'id');
     BuiltValueNullFieldError.checkNotNull(title, 'Movie', 'title');
     BuiltValueNullFieldError.checkNotNull(year, 'Movie', 'year');
     BuiltValueNullFieldError.checkNotNull(rating, 'Movie', 'rating');
+    BuiltValueNullFieldError.checkNotNull(summary, 'Movie', 'summary');
     BuiltValueNullFieldError.checkNotNull(genres, 'Movie', 'genres');
     BuiltValueNullFieldError.checkNotNull(mediumImage, 'Movie', 'mediumImage');
+    BuiltValueNullFieldError.checkNotNull(background, 'Movie', 'background');
   }
 
   @override
@@ -341,35 +465,53 @@ class _$Movie extends Movie {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Movie &&
+        id == other.id &&
         title == other.title &&
         year == other.year &&
         rating == other.rating &&
+        summary == other.summary &&
         genres == other.genres &&
-        mediumImage == other.mediumImage;
+        mediumImage == other.mediumImage &&
+        background == other.background;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, title.hashCode), year.hashCode), rating.hashCode),
-            genres.hashCode),
-        mediumImage.hashCode));
+        $jc(
+            $jc(
+                $jc(
+                    $jc(
+                        $jc($jc($jc(0, id.hashCode), title.hashCode),
+                            year.hashCode),
+                        rating.hashCode),
+                    summary.hashCode),
+                genres.hashCode),
+            mediumImage.hashCode),
+        background.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Movie')
+          ..add('id', id)
           ..add('title', title)
           ..add('year', year)
           ..add('rating', rating)
+          ..add('summary', summary)
           ..add('genres', genres)
-          ..add('mediumImage', mediumImage))
+          ..add('mediumImage', mediumImage)
+          ..add('background', background))
         .toString();
   }
 }
 
 class MovieBuilder implements Builder<Movie, MovieBuilder> {
   _$Movie? _$v;
+
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
   String? _title;
   String? get title => _$this._title;
@@ -383,6 +525,10 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
   double? get rating => _$this._rating;
   set rating(double? rating) => _$this._rating = rating;
 
+  String? _summary;
+  String? get summary => _$this._summary;
+  set summary(String? summary) => _$this._summary = summary;
+
   ListBuilder<String>? _genres;
   ListBuilder<String> get genres =>
       _$this._genres ??= new ListBuilder<String>();
@@ -392,16 +538,23 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
   String? get mediumImage => _$this._mediumImage;
   set mediumImage(String? mediumImage) => _$this._mediumImage = mediumImage;
 
+  String? _background;
+  String? get background => _$this._background;
+  set background(String? background) => _$this._background = background;
+
   MovieBuilder();
 
   MovieBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
+      _id = $v.id;
       _title = $v.title;
       _year = $v.year;
       _rating = $v.rating;
+      _summary = $v.summary;
       _genres = $v.genres.toBuilder();
       _mediumImage = $v.mediumImage;
+      _background = $v.background;
       _$v = null;
     }
     return this;
@@ -424,15 +577,20 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
     try {
       _$result = _$v ??
           new _$Movie._(
+              id: BuiltValueNullFieldError.checkNotNull(id, 'Movie', 'id'),
               title: BuiltValueNullFieldError.checkNotNull(
                   title, 'Movie', 'title'),
               year:
                   BuiltValueNullFieldError.checkNotNull(year, 'Movie', 'year'),
               rating: BuiltValueNullFieldError.checkNotNull(
                   rating, 'Movie', 'rating'),
+              summary: BuiltValueNullFieldError.checkNotNull(
+                  summary, 'Movie', 'summary'),
               genres: genres.build(),
               mediumImage: BuiltValueNullFieldError.checkNotNull(
-                  mediumImage, 'Movie', 'mediumImage'));
+                  mediumImage, 'Movie', 'mediumImage'),
+              background: BuiltValueNullFieldError.checkNotNull(
+                  background, 'Movie', 'background'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -444,6 +602,124 @@ class MovieBuilder implements Builder<Movie, MovieBuilder> {
       }
       rethrow;
     }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$AppUser extends AppUser {
+  @override
+  final String uid;
+  @override
+  final String username;
+  @override
+  final String email;
+  @override
+  final String? photoUrl;
+
+  factory _$AppUser([void Function(AppUserBuilder)? updates]) =>
+      (new AppUserBuilder()..update(updates)).build();
+
+  _$AppUser._(
+      {required this.uid,
+      required this.username,
+      required this.email,
+      this.photoUrl})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(uid, 'AppUser', 'uid');
+    BuiltValueNullFieldError.checkNotNull(username, 'AppUser', 'username');
+    BuiltValueNullFieldError.checkNotNull(email, 'AppUser', 'email');
+  }
+
+  @override
+  AppUser rebuild(void Function(AppUserBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  AppUserBuilder toBuilder() => new AppUserBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is AppUser &&
+        uid == other.uid &&
+        username == other.username &&
+        email == other.email &&
+        photoUrl == other.photoUrl;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(
+        $jc($jc($jc(0, uid.hashCode), username.hashCode), email.hashCode),
+        photoUrl.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('AppUser')
+          ..add('uid', uid)
+          ..add('username', username)
+          ..add('email', email)
+          ..add('photoUrl', photoUrl))
+        .toString();
+  }
+}
+
+class AppUserBuilder implements Builder<AppUser, AppUserBuilder> {
+  _$AppUser? _$v;
+
+  String? _uid;
+  String? get uid => _$this._uid;
+  set uid(String? uid) => _$this._uid = uid;
+
+  String? _username;
+  String? get username => _$this._username;
+  set username(String? username) => _$this._username = username;
+
+  String? _email;
+  String? get email => _$this._email;
+  set email(String? email) => _$this._email = email;
+
+  String? _photoUrl;
+  String? get photoUrl => _$this._photoUrl;
+  set photoUrl(String? photoUrl) => _$this._photoUrl = photoUrl;
+
+  AppUserBuilder();
+
+  AppUserBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _uid = $v.uid;
+      _username = $v.username;
+      _email = $v.email;
+      _photoUrl = $v.photoUrl;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(AppUser other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$AppUser;
+  }
+
+  @override
+  void update(void Function(AppUserBuilder)? updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$AppUser build() {
+    final _$result = _$v ??
+        new _$AppUser._(
+            uid: BuiltValueNullFieldError.checkNotNull(uid, 'AppUser', 'uid'),
+            username: BuiltValueNullFieldError.checkNotNull(
+                username, 'AppUser', 'username'),
+            email: BuiltValueNullFieldError.checkNotNull(
+                email, 'AppUser', 'email'),
+            photoUrl: photoUrl);
     replace(_$result);
     return _$result;
   }

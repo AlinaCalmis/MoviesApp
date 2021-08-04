@@ -28,6 +28,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   int? get selectedMovie;
 
+  AppUser? get user;
+
   Map<String, dynamic> get json => serializers.serializeWith(serializer, this)! as Map<String, dynamic>;
 
   static Serializer<AppState> get serializer => _$appStateSerializer;
