@@ -56,7 +56,16 @@ class _RegisterLogInState extends State<RegisterLogIn> {
                   ),
                   TextFormField(
                     controller: _passController,
-                    decoration: const InputDecoration(labelText: 'password'),
+                    decoration: InputDecoration(
+                      labelText: 'password',
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() => _obscureText = !_obscureText);
+                        },
+                      ),
+                    ),
+                    obscureText: _obscureText,
                     keyboardType: TextInputType.visiblePassword,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {

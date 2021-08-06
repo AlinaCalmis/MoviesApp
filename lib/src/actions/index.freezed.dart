@@ -9,7 +9,7 @@ part of actions;
 
 T _$identity<T>(T value) => value;
 
-final _privateConstructorUsedError = UnsupportedError(
+final UnsupportedError _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
@@ -35,7 +35,7 @@ class _$GetMoviesTearOff {
 }
 
 /// @nodoc
-const $GetMovies = _$GetMoviesTearOff();
+const _$GetMoviesTearOff $GetMovies = _$GetMoviesTearOff();
 
 /// @nodoc
 mixin _$GetMovies {
@@ -98,7 +98,7 @@ class _$GetMoviesStartCopyWithImpl<$Res> extends _$GetMoviesCopyWithImpl<$Res>
     implements $GetMoviesStartCopyWith<$Res> {
   _$GetMoviesStartCopyWithImpl(
       GetMoviesStart _value, $Res Function(GetMoviesStart) _then)
-      : super(_value, (v) => _then(v as GetMoviesStart));
+      : super(_value, (GetMovies v) => _then(v as GetMoviesStart));
 
   @override
   GetMoviesStart get _value => super._value as GetMoviesStart;

@@ -7,9 +7,7 @@ import 'package:redux/redux.dart';
 import 'package:yts_movie_redux/src/actions/index.dart';
 import 'package:yts_movie_redux/src/containers/is_loading_container.dart';
 import 'package:yts_movie_redux/src/containers/movie_container.dart';
-import 'package:yts_movie_redux/src/containers/user_container.dart';
 import 'package:yts_movie_redux/src/models/index.dart';
-import 'package:yts_movie_redux/src/presentation/user_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

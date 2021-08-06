@@ -26,7 +26,7 @@ class UserPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: currentUser == null ? const Text('') : Text("${currentUser.username}'s profile"),
-              actions: [
+              actions: <Widget>[
                 IconButton(
                     onPressed: () {
                       StoreProvider.of<AppState>(context).dispatch(const LogOut());
