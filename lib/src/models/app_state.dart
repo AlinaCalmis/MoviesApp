@@ -9,7 +9,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   factory AppState.initialState() {
     return AppState((AppStateBuilder b) {
       b
-      ..movies = ListBuilder<Movie>(<Type>[])
+        ..movies = ListBuilder<Movie>(<Type>[])
         ..isLoading = true
         ..getNextPage = false
         ..page = 1;

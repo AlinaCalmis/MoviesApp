@@ -8,5 +8,5 @@ part 'serializers.g.dart';
 
 @SerializersFor(<Type>[Movie, AppState])
 Serializers serializers = (_$serializers.toBuilder() //
-  ..addPlugin(StandardJsonPlugin()))
+      ..addPlugin(StandardJsonPlugin()))
     .build();

@@ -15,10 +15,10 @@ part 'index.freezed.dart';
 
 abstract class AppAction {}
 
-abstract class ErrorAction implements AppAction{
+abstract class ErrorAction implements AppAction {
   Object get error;
 
-  StackTrace get  stackTrace;
+  StackTrace get stackTrace;
 }
 
 typedef ActionResult = Function(AppAction action);

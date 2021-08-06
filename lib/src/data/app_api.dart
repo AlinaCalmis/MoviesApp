@@ -5,8 +5,7 @@ import 'package:http/http.dart';
 import 'package:yts_movie_redux/src/models/index.dart';
 
 class MovieApp {
-  const MovieApp({required Client client})
-      : _client = client;
+  const MovieApp({required Client client}) : _client = client;
 
   final Client _client;
 
@@ -17,7 +16,7 @@ class MovieApp {
       pathSegments: <String>['api', 'v2', 'list_movies.json'],
       queryParameters: <String, String>{'limit': '20', 'page': '$page'},
     );
-print(url);
+    print(url);
     final Response response = await _client.get(url);
     final String body = response.body;
     final Map<String, dynamic> allData = jsonDecode(body) as Map<String, dynamic>;

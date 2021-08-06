@@ -46,12 +46,12 @@ class _HomePageState extends State<HomePage> {
           'YTS Movies',
           style: GoogleFonts.montserrat(),
         ),
-        actions: <Widget>[IconButton(
-                onPressed: () {
-                    Navigator.pushNamed(context, '/userPage');
-                },
-                icon: const Icon(Icons.person_outline)),
-
+        actions: <Widget>[
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/userPage');
+              },
+              icon: const Icon(Icons.person_outline)),
         ],
       ),
       body: Column(

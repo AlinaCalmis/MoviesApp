@@ -1,4 +1,5 @@
 part of 'index.dart';
+
 @freezed
 class InitializeApp with _$InitializeApp implements AppAction {
   const factory InitializeApp() = InitializeAppStart;
